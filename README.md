@@ -1,1 +1,1 @@
-# java_techie_jar_shared_proj
+# github-actions-example
