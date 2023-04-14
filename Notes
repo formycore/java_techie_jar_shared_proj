@@ -17,3 +17,12 @@ def call (cred){
      sh 'mvn clean package sonar:sonar'
 }
 }
+------------------------------------------------
+waitforqualitygate
+- generate it
+- generated one is 
+- waitForQualityGate abortPipeline: false, credentialsId: cred
+- copy the generated script to shared lib repo
+- def call (cred){
+  waitForQualityGate abortPipeline: false, credentialsId: cred
+}

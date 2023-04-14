@@ -43,5 +43,14 @@ pipeline {
             }
         }
         }
+        stage('Quality Gate Analysis'){
+        when { expression { params.action == 'create' } }
+        steps {
+            script {
+                def SonarQubeCred = 'sonarsecret'
+                qualityGatesAnalysis(SonarQubeCred)
+            }
+        }
+        }
     }
 }
