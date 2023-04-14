@@ -2,7 +2,13 @@
 // this way we import the library
 pipeline {
     agent any
+    parameters{
+        choice(name: 'action', choices: 'create\ndestroy', description: 'create or destroy')
+    }
     stages {
+        when {
+            expression { params.action == 'create' }
+        }
         stage('Git Checkout'){
             steps {
                 gitCheckout(
@@ -13,6 +19,9 @@ pipeline {
         }
         // Unit Test
         stage('Unit Test Maven'){
+        when {
+            expression { params.action == 'create' }
+            }
             steps {
                 script {
                     mvnTest()
@@ -21,6 +30,9 @@ pipeline {
         }
         // Integration Test
         stage ('Integration Tets'){
+         when {
+            expression { params.action == 'create' }
+            }
             steps {
                 script {
                     mvnIntegrationtest()
