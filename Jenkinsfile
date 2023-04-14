@@ -8,8 +8,15 @@ pipeline {
                 gitCheckout(
                     branch: "master",
                     url: "https://github.com/formycore/java_techie_jar_shared_proj.git"
-                    
                 )
+            }
+        }
+        // Unit Test
+        stage('Unit Test Maven'){
+            steps {
+                script {
+                    mvnTest()
+                }
             }
         }
     }
