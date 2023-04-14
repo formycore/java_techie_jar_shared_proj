@@ -1,0 +1,19 @@
+Pipeline syntax
+Steps
+Sample Step
+withSonarqubeEnv
+- generate it
+- copy the generated script to shared lib repo
+----------------------------------
+def call (){
+  withSonarQubeEnv(credentialsId: 'sonarsecret') {
+     sh 'mvn clean package sonar:sonar'
+}
+}
+------------------------------------------------
+we need to pass the credentials to new project as it differs from project to project 
+def call (cred){
+  withSonarQubeEnv(credentialsId: cred) {
+     sh 'mvn clean package sonar:sonar'
+}
+}
