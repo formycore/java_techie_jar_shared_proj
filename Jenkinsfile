@@ -19,5 +19,11 @@ pipeline {
                 }
             }
         }
+        // Integration Test
+        stage ('Integration Tets'){
+            script {
+                mvnIntegrationtest()
+            }
+        }
     }
 }
