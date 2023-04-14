@@ -26,3 +26,9 @@ waitforqualitygate
 - def call (cred){
   waitForQualityGate abortPipeline: false, credentialsId: cred
 }
+------------------------------------------------
+- here we need webhook with sonarqube 
+- under Administration -> Configuration -> Webhooks
+- add webhook
+- name: jenkins
+- url: http://jenkins-url:8080/sonarqube-webhook/
