@@ -6,7 +6,7 @@ pipeline {
         stage('Git Checkout'){
             steps {
                 gitCheckout(
-                    branch: "master"
+                    branch: "master",
                     url: "https://github.com/formycore/java_techie_jar_shared_proj.git"
                     
                 )
