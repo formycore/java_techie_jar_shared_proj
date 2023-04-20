@@ -1,0 +1,59 @@
+@Library('my-shared-library') _
+// this way we import the library
+pipeline {
+    agent any
+    parameters{
+        choice(name: 'action', choices: 'create\ndestroy', description: 'create or destroy')
+        string(name: 'aws_account_id', description:'Name of the aws account id', defaultValue:'CHANGEIT')
+        string(name:'region', description:'Region of ecr', defaultValue: 'ap-south-1')
+        //string(name:'Appname', description:'Name of the application', defaultValue: 'springboot')
+        string(name:'ecr_repoName', description:'Repo Name', defaultValue: 'mrdevops')
+    }
+    stages {
+        
+        stage('Git Checkout'){
+            when { expression { params.action == 'create' } }
+            steps {
+                gitCheckout(
+                    branch: "master",
+                    url: "https://github.com/formycore/java_techie_jar_shared_proj.git"
+                )
+            }
+        }
+        stage ('Static Code Analysis') {
+        when { expression { params.action == 'create' } }
+        steps {
+            script {
+                def SonarQubeCred = 'sonarsecret'
+                staticCodeAnalysis(SonarQubeCred)
+            }
+        }
+        }
+        stage('Quality Gate Analysis'){
+        when { expression { params.action == 'create' } }
+        steps {
+            script {
+                def SonarQubeCred = 'sonarsecret'
+                qualityGatesAnalysis(SonarQubeCred)
+            }
+        }
+        }
+        stage('Maven Build'){
+            when { expression { params.action == 'create' } }
+            steps {
+                script {
+                    mvnBuild()
+                }
+            }
+        }
+ 
+        stage('Docker build: ecr') {
+            when { expression { params.action == 'create' } }
+            steps {
+                script {
+                    ecrDockerBuild("${params.aws_account_id}","${params.region}","${params.ecr_repoName}")
+                }
+            }
+        }
+    }
+}
