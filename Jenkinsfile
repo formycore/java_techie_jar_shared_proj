@@ -65,6 +65,7 @@ pipeline {
             }
         }
         stage('Docker Build'){
+            when { expression { params.action == 'create' } }
             steps {
                 script {
                     dockerBuild("${params.ImageName}","${params.Imagetag}","${params.DockerHubUser}")
@@ -72,9 +73,18 @@ pipeline {
             }
         }
         stage ('Docker scan: Trivy'){
+            when { expression { params.action == 'create' } }
             steps{
                 script{
                     dockerImageScan("${params.ImageName}","${params.Imagetag}","${params.DockerHubUser}")
+                }
+            }
+        }
+        stage ('Docker Push '){
+            when { expression { params.action == 'create' } }
+            steps {
+                script {
+                    dockerPush("${params.ImageName}","${params.Imagetag}","${params.DockerHubUser}")
                 }
             }
         }
